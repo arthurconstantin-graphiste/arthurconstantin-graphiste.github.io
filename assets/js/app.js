@@ -32,6 +32,43 @@
     toggle?.setAttribute('aria-expanded', 'false');
   }));
 
+
+  // Client cards on touch devices: first tap reveals the back, second tap opens the client link.
+  // Desktop hover behavior is intentionally left unchanged.
+  const touchClientCards = $$('.collab-card[href]');
+  const touchClientMode = matchMedia('(hover:none), (pointer:coarse)').matches;
+  if(touchClientMode && touchClientCards.length){
+    const closeClientCards = except => {
+      touchClientCards.forEach(card => {
+        if(card !== except){
+          card.classList.remove('touch-open');
+          card.setAttribute('aria-expanded', 'false');
+        }
+      });
+    };
+
+    touchClientCards.forEach(card => {
+      card.setAttribute('aria-expanded', 'false');
+      card.addEventListener('click', event => {
+        if(!card.classList.contains('touch-open')){
+          event.preventDefault();
+          closeClientCards(card);
+          card.classList.add('touch-open');
+          card.setAttribute('aria-expanded', 'true');
+        }
+        // If already open, do not preventDefault: the second tap follows the href normally.
+      });
+    });
+
+    document.addEventListener('click', event => {
+      if(!event.target.closest('.collab-card')) closeClientCards();
+    });
+
+    document.addEventListener('keydown', event => {
+      if(event.key === 'Escape') closeClientCards();
+    });
+  }
+
   // Reveals
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
