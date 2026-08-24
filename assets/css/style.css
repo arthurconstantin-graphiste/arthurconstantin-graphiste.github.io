@@ -589,3 +589,84 @@ article.collab-card{cursor:default}
   .journey-card-mark{width:48px;height:48px;border-radius:13px;margin-bottom:16px}
   .journey-card-mark.icon-mark svg{width:28px;height:28px}
 }
+
+/* ===== V74 / Mobile polish ===== */
+@media(max-width:720px){
+  /* Keep the first portfolio block simple and stable on phones. */
+  .selected{overflow:hidden}
+  .selected .section-head{margin-bottom:24px}
+  .selected .section-label{max-width:100%;line-height:1.4}
+  .selected .h2{font-size:clamp(43px,13vw,62px);line-height:.9}
+  .reel{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+  .reel-side{display:contents}
+  .work-card,.work-card.tall,.reel-side .work-card{margin:0;min-height:0;width:100%}
+  .reel>.work-card.tall{aspect-ratio:4/5}
+  .reel-side .work-card{aspect-ratio:16/10}
+  .work-card img,.work-card img[data-parallax-img]{transform:scale(1.015)!important;will-change:auto}
+  .work-card:hover img,.work-card:hover img[data-parallax-img]{transform:scale(1.015)!important;filter:none}
+  .work-meta{left:15px;right:15px;bottom:14px;gap:12px;align-items:flex-end}
+  .work-meta .mono{font-size:9px;line-height:1.3;letter-spacing:.06em}
+  .work-title{font-size:clamp(25px,8vw,34px);line-height:.92}
+  .work-open{width:40px;height:40px;flex:0 0 40px}
+  .all-work{margin-top:24px}
+
+  /* Core services: avoid awkward wrapping / icon collisions. */
+  .services .section-head{margin-bottom:24px}
+  .service-row{grid-template-columns:32px minmax(0,1fr) 38px;gap:10px;min-height:92px;padding:16px 0;align-items:center}
+  .service-row .num{font-size:9px}
+  .service-name{font-size:clamp(24px,7.4vw,31px);line-height:.96;overflow-wrap:anywhere}
+  .service-icon{width:38px;height:38px;display:grid;place-items:center}
+
+  /* Secondary home cards stay readable without desktop-only parallax/tilt artefacts. */
+  .beyond-intro{margin-bottom:36px}
+  .beyond-intro>p{font-size:16px;line-height:1.55}
+  .beyond-grid{gap:14px}
+  .beyond-card{border-radius:18px}
+  .beyond-card .beyond-media{aspect-ratio:4/3}
+  .beyond-card.hover-video-card .beyond-media,
+  .beyond-card.photo-card .beyond-media{aspect-ratio:4/5}
+  .beyond-media img[data-parallax-img],
+  .tilt-media-card .beyond-media img[data-parallax-img],
+  .photo-slide img[data-parallax-img]{transform:scale(1.02)!important;will-change:auto}
+  .beyond-copy{padding:20px}
+  .beyond-copy h3{font-size:clamp(38px,11vw,52px);margin:12px 0 10px;line-height:.88}
+  .beyond-copy p{font-size:13px;line-height:1.5}
+  .beyond-copy .mono{font-size:9px}
+
+  /* Horizontal photo rail: predictable touch scrolling, no layout jump. */
+  .photo-rail{-webkit-overflow-scrolling:touch;scroll-padding-inline:20px;overscroll-behavior-x:contain}
+  .photo-rail::-webkit-scrollbar{display:none}
+  .photo-rail{scrollbar-width:none}
+
+  /* Remove desktop lift effects on touch devices, which can leave a sticky hover state. */
+  .tilt-card,.tilt-card:hover{transform:none!important;box-shadow:none}
+  .work-card.tilt-card:hover,.collab-card.tilt-card:hover,.proof-image.tilt-card:hover{transform:none!important}
+
+  /* Safer mobile spacing at the very bottom. */
+  .big-cta{padding-top:84px;padding-bottom:70px}
+  .footer{padding-bottom:max(24px,env(safe-area-inset-bottom))}
+}
+
+@media(max-width:470px){
+  .selected .container{padding-inline:16px}
+  .reel{gap:10px}
+  .reel>.work-card.tall{aspect-ratio:4/5}
+  .reel-side .work-card{aspect-ratio:16/10}
+  .work-meta{left:13px;right:13px;bottom:12px}
+  .work-title{font-size:clamp(24px,8vw,31px)}
+  .service-name{font-size:clamp(23px,7.2vw,29px)}
+  .beyond-card .beyond-media{aspect-ratio:5/4}
+  .beyond-card.hover-video-card .beyond-media,
+  .beyond-card.photo-card .beyond-media{aspect-ratio:4/5}
+}
+
+/* V74 mobile reel nesting fix */
+@media(max-width:720px){
+  .reel-side{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+}
+@media(max-width:470px){
+  .reel-side{gap:10px}
+}
+@media(max-width:720px){
+  .reel>.work-card.tall{grid-column:auto}
+}
