@@ -773,3 +773,45 @@ article.collab-card{cursor:default}
     filter:none !important;
   }
 }
+
+
+/* ===== V77 stability: featured collaboration cards =====
+   Avoid nested 3D compositing (card tilt + flip + animated reels), which can
+   flicker/disappear intermittently in WebKit/Safari. */
+@media (hover:hover) and (pointer:fine){
+  .collab-card.featured.tilt-card,
+  .collab-card.featured.tilt-card:hover{
+    transform:none!important;
+    transform-style:flat!important;
+    will-change:auto!important;
+  }
+  .collab-card.featured .collab-hover-note{
+    transform:none!important;
+    -webkit-transform:none!important;
+    backface-visibility:visible!important;
+    -webkit-backface-visibility:visible!important;
+    opacity:0;
+    transition:opacity .32s var(--ease)!important;
+  }
+  .collab-card.featured:hover .collab-hover-note,
+  .collab-card.featured:focus-visible .collab-hover-note{
+    transform:none!important;
+    -webkit-transform:none!important;
+    opacity:1;
+  }
+  .collab-card.featured:hover .collab-media,
+  .collab-card.featured:hover .collab-overlay,
+  .collab-card.featured:hover .index,
+  .collab-card.featured:hover .collab-copy,
+  .collab-card.featured:focus-visible .collab-media,
+  .collab-card.featured:focus-visible .collab-overlay,
+  .collab-card.featured:focus-visible .index,
+  .collab-card.featured:focus-visible .collab-copy{
+    transform:none!important;
+    -webkit-transform:none!important;
+    opacity:0!important;
+  }
+  .collab-card.featured .splinter-reel .reel-track{animation-play-state:paused}
+  .collab-card.featured:hover .splinter-reel .reel-track,
+  .collab-card.featured:focus-visible .splinter-reel .reel-track{animation-play-state:running}
+}

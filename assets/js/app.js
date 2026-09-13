@@ -156,7 +156,7 @@
 
   // 3D tilt cards
   if(finePointer && !reducedMotion){
-    $$('[data-tilt]').forEach(card => {
+    $$('[data-tilt]:not(.collab-card.featured)').forEach(card => {
       card.addEventListener('pointermove', e => {
         const r = card.getBoundingClientRect();
         const px = (e.clientX - r.left) / r.width;

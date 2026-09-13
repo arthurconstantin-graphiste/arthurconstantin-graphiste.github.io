@@ -510,3 +510,46 @@
   .pf-project-action{width:100%;flex:none}
 }
 
+
+
+/* V76 - crisp CSS arrows for portfolio cards/actions */
+.pf-card-open,
+.pf-project-action b{
+  color:currentColor;
+  font-size:0 !important;
+  position:relative;
+}
+.pf-card-open::before,
+.pf-card-open::after,
+.pf-project-action b::before,
+.pf-project-action b::after{
+  content:"";
+  position:absolute;
+  display:block;
+}
+.pf-card-open::before,
+.pf-project-action b::before{
+  left:20%;
+  bottom:24%;
+  width:54%;
+  height:2px;
+  background:currentColor;
+  border-radius:999px;
+  transform:rotate(-45deg);
+  transform-origin:left center;
+}
+.pf-card-open::after,
+.pf-project-action b::after{
+  right:19%;
+  top:19%;
+  width:28%;
+  height:28%;
+  border-top:2px solid currentColor;
+  border-right:2px solid currentColor;
+  border-radius:1px;
+}
+
+
+/* ===== V77 stability: masonry repaint ===== */
+.pf-grid{transform:none;-webkit-transform:none}
+.pf-card{will-change:auto}

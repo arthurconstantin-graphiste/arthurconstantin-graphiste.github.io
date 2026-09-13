@@ -17,6 +17,7 @@
   const shuffleBtn = $('.pf-shuffle');
   const finePointer = matchMedia('(pointer:fine)').matches;
   const reducedMotion = matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const isSafari = /^((?!chrome|chromium|android).)*safari/i.test(navigator.userAgent);
   const cursor = $('.cursor');
   const cursorText = cursor?.querySelector('span');
 
@@ -48,10 +49,10 @@
   const projectModes = new Set(['stream','merch','da']);
   const escapeHTML = str => String(str).replace(/[&<>'"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m]));
 
-  function itemCard(item, index){
+  function itemCard(item, index, eager=false){
     const note = item.note ? `<span class="pf-card-note">${escapeHTML(item.note)}</span>` : '';
     return `<article class="pf-card" tabindex="0" role="button" data-pf-id="${item.id}" data-cursor="VOIR" aria-label="Ouvrir ${escapeHTML(item.categoryLabel)} - ${escapeHTML(item.client)}${item.note?' - '+escapeHTML(item.note):''}">
-      <div class="pf-card-media"><img src="${item.src}" alt="${escapeHTML(item.alt)}" width="${item.width}" height="${item.height}" loading="lazy" decoding="async"></div>
+      <div class="pf-card-media"><img src="${item.src}" alt="${escapeHTML(item.alt)}" width="${item.width}" height="${item.height}" loading="${eager ? 'eager' : 'lazy'}" decoding="async"></div>
       ${note}
       <span class="pf-card-index">${String(index+1).padStart(2,'0')}</span>
       <div class="pf-card-meta"><div class="pf-card-copy"><span>${escapeHTML(item.categoryLabel)}</span><strong>${escapeHTML(item.client)}</strong></div><span class="pf-card-open">↗</span></div>
@@ -96,7 +97,7 @@
   }
 
   function animateIn(scope=content){
-    if(reducedMotion) return;
+    if(reducedMotion || isSafari) return;
     const cards = $$('.pf-card, .pf-project-card', scope);
     cards.slice(0,60).forEach((card,i) => {
       const anim = card.animate([{opacity:0, transform:'translateY(22px) scale(.988)'},{opacity:1, transform:'translateY(0) scale(1)'}], {duration:600, delay:Math.min(i*48,360), easing:'cubic-bezier(.22,1,.36,1)', fill:'both'});
@@ -127,7 +128,7 @@
     if(shuffleSalt) items = deterministicShuffle(items, shuffleSalt);
     const shown = allExpanded ? items : items.slice(0,60);
     renderItems = shown;
-    content.innerHTML = `<div class="pf-grid">${shown.map(itemCard).join('')}</div>`;
+    content.innerHTML = `<div class="pf-grid">${shown.map((item,i)=>itemCard(item,i,!allExpanded || i < 60)).join('')}</div>`;
     viewTitle.textContent = allExpanded ? 'Archive complète' : 'Sélection libre';
     viewCount.textContent = `${shown.length} visuels${allExpanded?'':' / '+data.total}`;
     moreWrap.hidden = allExpanded; shuffleBtn.style.display = '';
@@ -146,7 +147,7 @@
     });
     content.innerHTML = orderedGroups.map(([name,items]) => `<section class="pf-client-section" id="client-${name.toLowerCase().replace(/[^a-z0-9]+/g,'-')}">
       <div class="pf-client-section-head"><h3>${escapeHTML(name)}</h3><span>${items.length} visuel${items.length>1?'s':''}</span></div>
-      <div class="pf-grid">${items.map(itemCard).join('')}</div>
+      <div class="pf-grid">${items.map((item,i)=>itemCard(item,i,i < 60)).join('')}</div>
     </section>`).join('') || `<div class="pf-empty">Aucun visuel dans cette sélection.</div>`;
     viewTitle.textContent = client==='all' ? labels[cat] : client;
     viewCount.textContent = `${filtered.length} visuel${filtered.length>1?'s':''}`;
